@@ -1,0 +1,19 @@
+#Execute on Node13 of Plant Sciences Hydrogen Cluster
+
+#Create index from Transcriptome file (Version 1, JGI) using Bowtie Build - name them 'rhiz'
+
+
+/applications/bowtie2/bowtie2-2.3.2/bowtie2-build ~/Gloin1_GeneCatalog_transcripts_20120510.nt.fasta rhiz &
+
+
+# Run Bowtie2 to loop through all files in directory (R1 and R2 files - for paired-end sequencing) and align to the 'rhiz' index
+
+for mate1 in *R1_001.fastq ; do
+   echo $mate1;
+   mate2=$(echo $mate1| sed 's/R1_001.fastq/R2_001.fastq/');
+   echo $mate2;
+   maten=$(echo $mate1| sed 's/R1_001.fastq/rhiz1.bam/');
+   echo $mate2;
+   /applications/bowtie2/bowtie2-2.3.2/bowtie2 -x /home/bm502/Ri_v1/rhiz -1 $mate1 -2 $mate2 -S /home/bm502/Alignments/$maten ;
+
+done 
