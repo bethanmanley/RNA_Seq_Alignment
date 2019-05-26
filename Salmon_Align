@@ -1,0 +1,18 @@
+#Align using Salmon. This uses 'lightweight alignment', can be executed faster than Bowtie2
+
+#Create index
+
+/applications/salmon/salmon-0.12.0_linux_x86_64/bin/salmon index -t Gloin1_GeneCatalog_transcripts_20120510.nt.fasta -i transcripts_index -k 31
+
+
+#Loop through files in current directory and align fastq files to transcriptome index - deposit in 'transcripts_quant' folder
+
+for mate1 in *R1_001.fastq ; do
+   echo $mate1;
+   mate2=$(echo $mate1| sed 's/R1_001.fastq/R2_001.fastq/');
+   echo $mate2;
+   maten=$(echo $mate1| sed 's/R1_001.fastq/rhiz1.bam/');
+   echo $mate2;
+   /applications/salmon/salmon-0.12.0_linux_x86_64/bin/salmon quant -i ~/Ri_V1/transcripts_index -l A -1 $mate1 -2 $mate2 --validateMappings -o ~/transcripts_quant/$maten ;
+
+done &
